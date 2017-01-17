@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Application-Id: BlockBricksMicroEJ
+Application-Version: 0.1.0
+Application-PrintableName: BlockBricksMicroEJ
+Application-Description: BlockBricksMicroEJ
+Application-Activities: fr.fonsatnicolas.esgi.BlockBricksActivity
+
