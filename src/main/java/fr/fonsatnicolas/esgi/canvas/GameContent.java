@@ -6,10 +6,9 @@ import ej.microui.display.GraphicsContext;
 import ej.microui.event.Event;
 import ej.microui.event.generator.Pointer;
 import ej.microui.util.EventHandler;
+import fr.fonsatnicolas.esgi.common.BBColors;
 
 public class GameContent extends Displayable implements EventHandler {
-	public static final int LIGHT_BROWN = 0xc5967a;
-	public static final int DARK_GREY = 0x5c5c5c;
 	
 	public static final int WIDTH_PLATE = 100;
 	public static final int HEIGHT_PLATE = 15;
@@ -33,10 +32,10 @@ public class GameContent extends Displayable implements EventHandler {
 	@Override
 	public void paint(GraphicsContext g) {
 		// Set green background
-		g.setColor(DARK_GREY);
+		g.setColor(BBColors.DARK_GREY);
 		g.fillRect(0,0,dimV,dimH);
 		
-		g.setColor(LIGHT_BROWN);
+		g.setColor(BBColors.LIGHT_BROWN);
 		g.fillRect(this.positionX, (dimH - HEIGHT_PLATE - 10), WIDTH_PLATE, HEIGHT_PLATE);
 	}
 
