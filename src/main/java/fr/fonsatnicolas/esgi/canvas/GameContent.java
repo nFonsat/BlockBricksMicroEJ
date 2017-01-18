@@ -37,7 +37,7 @@ public class GameContent extends Displayable implements EventHandler {
 		this.dimV = disp.getWidth();
 		this.positionX = (this.dimV/2) - (WIDTH_PLATE/2);
 		this.bricks = new ArrayList<>();
-		this.animateBrick(new Brick(this.getLastWidth(), HEIGHT_PLATE, BBColors.YELLOW));
+		this.animateBrick(BBColors.GREEN, 5);
 	}
 	
 	/************************ Displayable ************************/
@@ -197,9 +197,9 @@ public class GameContent extends Displayable implements EventHandler {
 		
 	}
 	
-	private void animateBrick(Brick brick) {
-		this.brick = brick;
-		AnimationBrick animator = new AnimationBrick(this, 2);
+	private void animateBrick(int color, int interval) {
+		this.brick = new Brick(this.getLastWidth(), HEIGHT_PLATE, color);
+		AnimationBrick animator = new AnimationBrick(this, interval);
 		Timer timer = new Timer();
 		int frame = 1000 / 60;
 		timer.schedule(animator, frame, frame);
