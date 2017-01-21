@@ -16,6 +16,22 @@ import fr.fonsatnicolas.esgi.component.Brick;
 
 public class GameContent extends Displayable implements EventHandler {
 	
+	public static int[] sColors = {
+			BBColors.CYAN,
+			BBColors.RED,
+			BBColors.YELLOW,
+			BBColors.GREEN,
+			BBColors.WHITE
+	};
+	
+	private int score = 0;
+	
+	private int speed = 1;
+	
+	private int counter = 1;
+	
+	public static final int MIN_WIDTH_PLATE = 5;
+	
 	public static final int WIDTH_PLATE = 100;
 	public static final int HEIGHT_PLATE = 15;
 	
@@ -37,7 +53,7 @@ public class GameContent extends Displayable implements EventHandler {
 		this.dimV = disp.getWidth();
 		this.positionX = (this.dimV/2) - (WIDTH_PLATE/2);
 		this.bricks = new ArrayList<>();
-		this.animateBrick(BBColors.GREEN, 5);
+		this.animateBrick(sColors[0], this.counter);
 	}
 	
 	/************************ Displayable ************************/
@@ -66,12 +82,17 @@ public class GameContent extends Displayable implements EventHandler {
 		return dimH - HEIGHT_PLATE - 10;
 	}
 	
-	private int getSizeBricks() {
+	private int getHeightBricks() {
 		return ((this.bricks.size() + 1) * HEIGHT_PLATE);
 	}
 	
 	private int getLastX() {
-		return this.positionX;
+		if (this.bricks.size() == 0) {
+			return this.positionX;
+		}
+		
+		int last = this.bricks.size()-1;
+		return this.bricks.get(last).getX();
 	}
 	
 	private int getLastWidth() {
@@ -79,12 +100,8 @@ public class GameContent extends Displayable implements EventHandler {
 			return WIDTH_PLATE;
 		}
 		
-		Brick brick = this.bricks.get(this.bricks.size()-1);
-		if (brick == null) {
-			return WIDTH_PLATE;
-		}
-		
-		return brick.getWidth();
+		int last = this.bricks.size()-1;
+		return this.bricks.get(last).getWidth();
 	}
 	
 	private void updateBricks(int distance) {
@@ -107,8 +124,6 @@ public class GameContent extends Displayable implements EventHandler {
 				Pointer ptr = (Pointer)Event.getGenerator(event);
 				
 				int position = ptr.getX() - (WIDTH_PLATE/2);
-				//System.out.println("Current position = " + position);
-				//System.out.println("POINTER = " + ptr.getX());
 				if (position < LIMIT_BLOCK) {
 					position = LIMIT_BLOCK;
 				} else if (position > (this.dimV - LIMIT_BLOCK - WIDTH_PLATE)) {
@@ -132,20 +147,21 @@ public class GameContent extends Displayable implements EventHandler {
 	/************************ AnimationBrick ************************/
 	private class AnimationBrick extends TimerTask {
 		private GameContent display;
-		private int interval;
+		private int speed;
 		
-		public AnimationBrick(GameContent display, int interval) {
+		public AnimationBrick(GameContent display, int speed) {
 			this.display = display;
-			this.interval = interval;
-			display.brick.setX(display.dimV/2);
+			this.speed = speed;
+			display.brick.setX(this.randomX());
 			display.brick.setY(0);
 		}
 
 		@Override
 		public void run() {
-			int y = display.brick.getY() + this.interval;
-			if (y > getBottomLimit() - getSizeBricks()) {
-				int colision = (getBottomLimit() - getSizeBricks()) - y;
+			int y = display.brick.getY() + this.speed;
+			int height = display.getBottomLimit() - display.getHeightBricks();
+			if (y > height) {
+				float colision = height - y;
 				if (colision > 0) {
 					System.out.println("Brick Animation DETECTION: " + colision);
 					this.cancel();
@@ -161,15 +177,16 @@ public class GameContent extends Displayable implements EventHandler {
 				boolean hasChanged = false;
 				if (endBrickX > startBlockX && endBrickX < endBlockX) {
 					System.out.println("Brick Animation NESTED LEFT");
-					int width = endBrickX - startBlockX;
+					int width = endBrickX - startBlockX ;
 					this.display.brick.setWidth(width);
-					this.display.brick.setX(this.display.positionX);
+					this.display.brick.setX(startBlockX);
 					hasChanged = true;
 				}
 				else if (startBrickX > startBlockX && startBrickX < endBlockX) {
 					System.out.println("Brick Animation NESTED RIGHT");
-					int width = endBrickX - endBlockX;
+					int width = endBlockX - startBrickX;
 					this.display.brick.setWidth(width);
+					this.display.brick.setX(endBlockX - this.display.brick.getWidth());
 					hasChanged = true;
 				}
 				else if (startBrickX == startBlockX && endBrickX == endBlockX) {
@@ -179,6 +196,7 @@ public class GameContent extends Displayable implements EventHandler {
 				
 				
 				if (hasChanged) {
+					this.display.brick.setY(height);
 					this.display.addCurrentBrick();
 					this.cancel();
 					return;
@@ -195,11 +213,17 @@ public class GameContent extends Displayable implements EventHandler {
 			this.display.repaint();
 		}
 		
+		private int randomX() {
+			int min = LIMIT_BLOCK + WIDTH_PLATE;
+			int max = (int) (this.display.dimV - LIMIT_BLOCK - (WIDTH_PLATE*1.5));
+			return min + (int)(Math.random() * ((max - min) + 1));
+		}
+		
 	}
 	
-	private void animateBrick(int color, int interval) {
+	private void animateBrick(int color, int speed) {
 		this.brick = new Brick(this.getLastWidth(), HEIGHT_PLATE, color);
-		AnimationBrick animator = new AnimationBrick(this, interval);
+		AnimationBrick animator = new AnimationBrick(this, speed);
 		Timer timer = new Timer();
 		int frame = 1000 / 60;
 		timer.schedule(animator, frame, frame);
@@ -207,9 +231,31 @@ public class GameContent extends Displayable implements EventHandler {
 	
 	private void addCurrentBrick() {
 		if (this.brick != null) {
+			
+			if (this.brick.getWidth() < MIN_WIDTH_PLATE) {
+				System.out.println("You lose ! Your score is " + this.score);
+				this.repaint();
+				return;
+			}
+			
+			if (this.getHeightBricks() > (3*(this.dimH/5))) {
+				this.bricks.clear();
+				int height = this.getBottomLimit() - this.getHeightBricks();
+				this.brick.setY(height);
+			}
+			
 			this.bricks.add(this.brick);
+			this.score++;
 			this.brick = null;
-			this.repaint();
+			
+			this.counter++;
+			int index = this.counter%sColors.length;
+			
+			if (this.counter%5 == 0) {
+				this.speed++;
+			}
+			
+			this.animateBrick(sColors[index], this.speed);
 		}
 	}
 }
