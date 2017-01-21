@@ -59,7 +59,6 @@ public class GameContent extends Displayable implements EventHandler {
 	/************************ Displayable ************************/
 	@Override
 	public void paint(GraphicsContext g) {
-		// Set green background
 		g.setColor(BBColors.DARK_GREY);
 		g.fillRect(0,0,dimV,dimH);
 		
