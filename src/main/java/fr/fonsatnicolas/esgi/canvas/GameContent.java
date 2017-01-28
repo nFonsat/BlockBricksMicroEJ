@@ -217,7 +217,7 @@ public class GameContent extends Displayable implements EventHandler {
 
 			if (y > getBottomLimit()) {
 				this.cancel();
-				System.out.println("Brick Animation END");
+				this.display.gameOver();
 				return;
 			}
 			
@@ -245,8 +245,7 @@ public class GameContent extends Displayable implements EventHandler {
 		if (this.brick != null) {
 			
 			if (this.brick.getWidth() < MIN_WIDTH_PLATE) {
-				System.out.println("You lose ! Your score is " + this.score);
-				this.repaint();
+				this.gameOver();
 				return;
 			}
 			
@@ -269,5 +268,10 @@ public class GameContent extends Displayable implements EventHandler {
 			
 			this.animateBrick(sColors[index], this.speed);
 		}
+	}
+	
+	public void gameOver() {
+		System.out.println("You lose ! Your score is " + this.score);
+		this.repaint();
 	}
 }
