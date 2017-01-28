@@ -2,8 +2,11 @@ package fr.fonsatnicolas.esgi;
 
 import ej.microui.MicroUI;
 import ej.wadapps.app.Activity;
+import fr.fonsatnicolas.esgi.canvas.GameContent;
 
 public class BlockBricksActivity implements Activity {
+	
+	private GameContent gameContent; 
 
 	@Override
 	public String getID() {
@@ -25,6 +28,9 @@ public class BlockBricksActivity implements Activity {
 	@Override
 	public void onStart() {
 		MicroUI.start();
+		
+		this.gameContent = new GameContent();
+		this.gameContent.show();
 	}
 
 	@Override
@@ -41,14 +47,12 @@ public class BlockBricksActivity implements Activity {
 
 	@Override
 	public void onStop() {
-		// TODO Auto-generated method stub
-		
+		this.gameContent.hide();
 	}
 
 	@Override
 	public void onDestroy() {
-		// TODO Auto-generated method stub
-		
+		this.gameContent = null;
 	}
 
 }
