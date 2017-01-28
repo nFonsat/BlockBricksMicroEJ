@@ -7,11 +7,13 @@ import java.util.TimerTask;
 
 import ej.microui.display.Display;
 import ej.microui.display.Displayable;
+import ej.microui.display.Font;
 import ej.microui.display.GraphicsContext;
 import ej.microui.event.Event;
 import ej.microui.event.generator.Pointer;
 import ej.microui.util.EventHandler;
 import fr.fonsatnicolas.esgi.common.BBColors;
+import fr.fonsatnicolas.esgi.common.BBFonts;
 import fr.fonsatnicolas.esgi.component.Brick;
 
 public class GameContent extends Displayable implements EventHandler {
@@ -74,6 +76,17 @@ public class GameContent extends Displayable implements EventHandler {
 			g.setColor(this.brick.getColor());
 			g.fillRect(this.brick.getX(), this.brick.getY(), this.brick.getWidth(), this.brick.getHeight());
 		}
+				
+		final Font font = Font.getFont(BBFonts.FONT_04B_15, 0, Font.STYLE_PLAIN);
+		g.setColor(BBColors.WHITE);
+		g.setFont(font);
+		
+		if (font == Font.getDefaultFont()) {
+			System.out.println("Unable to find custom font! Using default font instead");
+		}
+
+		g.drawString(String.valueOf(this.score), this.dimV-20, 20,
+				GraphicsContext.HCENTER | GraphicsContext.VCENTER);
 	}
 	
 	/************************ GameContent Helper ************************/
