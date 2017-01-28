@@ -77,7 +77,7 @@ public class GameContent extends Displayable implements EventHandler {
 			g.fillRect(this.brick.getX(), this.brick.getY(), this.brick.getWidth(), this.brick.getHeight());
 		}
 				
-		final Font font = Font.getFont(BBFonts.FONT_04B_15, 0, Font.STYLE_PLAIN);
+		final Font font = Font.getFont(BBFonts.FONT_04B_30, 0, Font.STYLE_PLAIN);
 		g.setColor(BBColors.WHITE);
 		g.setFont(font);
 		
@@ -85,7 +85,7 @@ public class GameContent extends Displayable implements EventHandler {
 			System.out.println("Unable to find custom font! Using default font instead");
 		}
 
-		g.drawString(String.valueOf(this.score), this.dimV-20, 20,
+		g.drawString(String.valueOf(this.score), this.dimV-30, 30,
 				GraphicsContext.HCENTER | GraphicsContext.VCENTER);
 	}
 	
