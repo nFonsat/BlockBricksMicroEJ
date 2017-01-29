@@ -1,21 +1,14 @@
 package fr.fonsatnicolas.esgi;
 
 import ej.microui.MicroUI;
-import ej.microui.display.Colors;
-import ej.microui.display.GraphicsContext;
-import ej.style.Stylesheet;
-import ej.style.outline.SimpleOutline;
-import ej.style.selector.ClassSelector;
-import ej.style.util.EditableStyle;
-import ej.style.util.StyleHelper;
+import ej.navigation.desktop.NavigationDesktop;
+import ej.navigation.page.Page;
 import ej.wadapps.app.Activity;
-import ej.widget.navigation.navigator.HistorizedNavigator;
-import ej.widget.navigation.page.Page;
 import fr.fonsatnicolas.esgi.page.Home;
 
 public class BlockBricksActivity implements Activity {
 	
-	private static HistorizedNavigator navigator;
+	private static NavigationDesktop navigator;
 
 	@Override
 	public String getID() {
@@ -37,7 +30,7 @@ public class BlockBricksActivity implements Activity {
 	@Override
 	public void onStart() {
 		MicroUI.start();
-		navigator = new HistorizedNavigator();
+		navigator = new NavigationDesktop();
 		show(new Home());
 	}
 
