@@ -1,12 +1,14 @@
 package fr.fonsatnicolas.esgi;
 
 import ej.microui.MicroUI;
+import ej.navigation.desktop.NavigationDesktop;
+import ej.navigation.page.Page;
 import ej.wadapps.app.Activity;
-import fr.fonsatnicolas.esgi.canvas.GameContent;
+import fr.fonsatnicolas.esgi.page.Home;
 
 public class BlockBricksActivity implements Activity {
 	
-	private GameContent gameContent; 
+	private static NavigationDesktop navigator;
 
 	@Override
 	public String getID() {
@@ -28,9 +30,8 @@ public class BlockBricksActivity implements Activity {
 	@Override
 	public void onStart() {
 		MicroUI.start();
-		
-		this.gameContent = new GameContent();
-		this.gameContent.show();
+		navigator = new NavigationDesktop();
+		show(new Home());
 	}
 
 	@Override
@@ -47,12 +48,30 @@ public class BlockBricksActivity implements Activity {
 
 	@Override
 	public void onStop() {
-		this.gameContent.hide();
 	}
 
 	@Override
 	public void onDestroy() {
-		this.gameContent = null;
+	}
+	
+	public static void show(Page page) {
+		System.out.println("Go to "+page.getCurrentURL());
+		navigator.show(page);
+	}
+	
+	public static void back() {
+		System.out.println("Back");
+		navigator.back();
+	}
+	
+	public static void clearStack() {
+		System.out.println("clearStack");
+		navigator.clearHistory();
+	}
+	
+	public static void reload() {
+		System.out.println("reload");
+		navigator.reload();
 	}
 
 }
