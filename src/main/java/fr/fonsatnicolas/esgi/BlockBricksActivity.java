@@ -1,12 +1,21 @@
 package fr.fonsatnicolas.esgi;
 
 import ej.microui.MicroUI;
+import ej.microui.display.Colors;
+import ej.microui.display.GraphicsContext;
+import ej.style.Stylesheet;
+import ej.style.outline.SimpleOutline;
+import ej.style.selector.ClassSelector;
+import ej.style.util.EditableStyle;
+import ej.style.util.StyleHelper;
 import ej.wadapps.app.Activity;
-import fr.fonsatnicolas.esgi.canvas.GameContent;
+import ej.widget.navigation.navigator.HistorizedNavigator;
+import ej.widget.navigation.page.Page;
+import fr.fonsatnicolas.esgi.page.Home;
 
 public class BlockBricksActivity implements Activity {
 	
-	private GameContent gameContent; 
+	private static HistorizedNavigator navigator;
 
 	@Override
 	public String getID() {
@@ -28,9 +37,8 @@ public class BlockBricksActivity implements Activity {
 	@Override
 	public void onStart() {
 		MicroUI.start();
-		
-		this.gameContent = new GameContent();
-		this.gameContent.show();
+		navigator = new HistorizedNavigator();
+		show(new Home());
 	}
 
 	@Override
@@ -47,12 +55,30 @@ public class BlockBricksActivity implements Activity {
 
 	@Override
 	public void onStop() {
-		this.gameContent.hide();
 	}
 
 	@Override
 	public void onDestroy() {
-		this.gameContent = null;
+	}
+	
+	public static void show(Page page) {
+		System.out.println("Go to "+page.getCurrentURL());
+		navigator.show(page);
+	}
+	
+	public static void back() {
+		System.out.println("Back");
+		navigator.back();
+	}
+	
+	public static void clearStack() {
+		System.out.println("clearStack");
+		navigator.clearHistory();
+	}
+	
+	public static void reload() {
+		System.out.println("reload");
+		navigator.reload();
 	}
 
 }
