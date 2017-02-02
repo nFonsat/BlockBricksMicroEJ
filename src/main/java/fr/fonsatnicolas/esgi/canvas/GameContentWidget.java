@@ -29,6 +29,8 @@ public class GameContentWidget extends StyledWidget {
 	
 	private List<Brick> bricks = new ArrayList<>();
 	
+	private AnimationBrick animator;
+	
 	private Brick currentBrick;
 	
 	private int positionX;
@@ -37,17 +39,13 @@ public class GameContentWidget extends StyledWidget {
 	
 	private int globalHeight;
 	
-	private boolean isPlaying = true;
+	private boolean isPlaying = false;
 	
 	private int counter = 1;
 	
 	private int score = 0;
 	
 	private int speed = 1;
-	
-	public GameContentWidget() {
-		this.animateBrick(sColors[0], this.counter);
-	}
 
 	/************************ StyledWidget ************************/
 	@Override
@@ -84,8 +82,26 @@ public class GameContentWidget extends StyledWidget {
 	public Rectangle validateContent(Style style, Rectangle bounds) {
 		this.globalHeight = bounds.getHeight();
 		this.globalWidth  = bounds.getWidth();
+		System.out.println("WIDTH:"+this.globalWidth+"|HEIGTH"+this.globalHeight);
 		this.positionX = (bounds.getWidth()/2) - (BBConstants.WIDTH_PLATE/2);
+		
+		if (!this.isPlaying) {
+			this.animateBrick(sColors[0], this.counter);
+		}
+		
 		return bounds;
+	}
+	
+	/**************************** GameContent ***************************/
+	public boolean isPlaying() {
+		return this.isPlaying;
+	}
+	
+	public void gameOver() {
+		System.out.println("You lose ! Your score is " + this.score);
+		this.isPlaying = false;
+		this.stopAnimation();
+		this.repaint();
 	}
 	
 	/************************ GameContent Helper ************************/
@@ -122,9 +138,18 @@ public class GameContentWidget extends StyledWidget {
 		}
 	}
 	
+	private void stopAnimation() {
+		if(this.animator != null) {
+			this.animator.cancel();
+			this.animator = null;
+		}
+	}
+	
 	private void animateBrick(int color, int speed) {
+		this.isPlaying = true;
+		stopAnimation();
 		this.currentBrick = new Brick(this.getLastWidth(), BBConstants.HEIGHT_PLATE, color);
-		AnimationBrick animator = new AnimationBrick(this, speed);
+		this.animator = new AnimationBrick(this, speed);
 		Timer timer = new Timer();
 		int frame = 1000 / 60;
 		timer.schedule(animator, frame, frame);
@@ -156,12 +181,6 @@ public class GameContentWidget extends StyledWidget {
 			
 			this.animateBrick(sColors[index], this.speed);
 		}
-	}
-	
-	private void gameOver() {
-		System.out.println("You lose ! Your score is " + this.score);
-		this.isPlaying = false;
-		this.repaint();
 	}
 	
 	/************************ EventHandler ************************/
