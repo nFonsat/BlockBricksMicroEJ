@@ -27,6 +27,7 @@ import ej.style.util.StyleHelper;
 import ej.widget.basic.Label;
 import ej.widget.composed.Button;
 import ej.widget.listener.OnClickListener;
+import fr.fonsatnicolas.esgi.BlockBricksActivity;
 import fr.fonsatnicolas.esgi.common.BBColors;
 
 public class Home extends Page {
@@ -58,6 +59,7 @@ public class Home extends Page {
 			@Override
 			public void onClick() {
 				System.out.println("JOUER");
+				BlockBricksActivity.show(new Game());
 			}
 		});
 		
