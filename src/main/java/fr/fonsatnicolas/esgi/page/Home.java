@@ -70,6 +70,7 @@ public class Home extends Page {
 			@Override
 			public void onClick() {
 				System.out.println("CLASSEMENT");
+				BlockBricksActivity.show(new Stats());
 			}
 		});
 		
