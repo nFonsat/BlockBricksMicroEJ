@@ -103,11 +103,11 @@ public class Stats extends Page {
 		int hours = date.get(Calendar.HOUR_OF_DAY);
 		int minutes = date.get(Calendar.MINUTE);
 		
-		builder.append(day).append('/')
-			.append(month).append('/')
-			.append(year).append(' ')
-			.append(hours).append(':')
-			.append(minutes)
+		builder.append(day < 10 ? '0'+String.valueOf(day) : day).append('/')
+			.append(month < 10 ? '0'+String.valueOf(month) : month).append('/')
+			.append(year).append("  ")
+			.append(hours < 10 ? '0'+String.valueOf(hours) : hours).append(':')
+			.append(minutes < 10 ? '0'+String.valueOf(minutes) : minutes)
 			;
 		
 		return builder.toString();
