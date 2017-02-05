@@ -12,10 +12,12 @@ import ej.microui.event.generator.Pointer;
 import ej.style.Style;
 import ej.style.container.Rectangle;
 import ej.widget.StyledWidget;
+import fr.fonsatnicolas.esgi.BlockBricksActivity;
 import fr.fonsatnicolas.esgi.common.BBColors;
 import fr.fonsatnicolas.esgi.common.BBConstants;
 import fr.fonsatnicolas.esgi.common.BBFonts;
 import fr.fonsatnicolas.esgi.component.Brick;
+import fr.fonsatnicolas.esgi.component.Score;
 
 public class GameContentWidget extends StyledWidget {
 	
@@ -43,7 +45,7 @@ public class GameContentWidget extends StyledWidget {
 	
 	private int counter = 1;
 	
-	private int score = 0;
+	private Score score;
 	
 	private int speed = 1;
 
@@ -74,7 +76,7 @@ public class GameContentWidget extends StyledWidget {
 			System.out.println("Unable to find custom font! Using default font instead");
 		}
 
-		g.drawString(String.valueOf(this.score), this.globalWidth-30, 30,
+		g.drawString(String.valueOf(this.score.getValue()), this.globalWidth-30, 30,
 				GraphicsContext.HCENTER | GraphicsContext.VCENTER);
 	}
 
@@ -89,6 +91,10 @@ public class GameContentWidget extends StyledWidget {
 			this.animateBrick(sColors[0], this.counter);
 		}
 		
+		if (this.score == null) {
+			this.score = new Score();
+		}
+		
 		return bounds;
 	}
 	
@@ -98,10 +104,12 @@ public class GameContentWidget extends StyledWidget {
 	}
 	
 	public void gameOver() {
-		System.out.println("You lose ! Your score is " + this.score);
+		System.out.println("You lose ! Your score is " + this.score.getValue());
 		this.isPlaying = false;
+		this.score.end();
 		this.stopAnimation();
 		this.repaint();
+		BlockBricksActivity.addScore(this.score);
 	}
 	
 	/************************ GameContent Helper ************************/
@@ -169,7 +177,7 @@ public class GameContentWidget extends StyledWidget {
 			}
 			
 			this.bricks.add(this.currentBrick);
-			this.score++;
+			this.score.increment();
 			this.currentBrick = null;
 			
 			this.counter++;

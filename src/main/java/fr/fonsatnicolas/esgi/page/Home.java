@@ -58,7 +58,6 @@ public class Home extends Page {
 		playBtn.addOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick() {
-				System.out.println("JOUER");
 				BlockBricksActivity.show(new Game());
 			}
 		});
@@ -69,7 +68,7 @@ public class Home extends Page {
 		statsBtn.addOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick() {
-				System.out.println("CLASSEMENT");
+				BlockBricksActivity.show(new Stats());
 			}
 		});
 		
@@ -79,7 +78,6 @@ public class Home extends Page {
 		exitBtn.addOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick() {
-				System.out.println("QUITTER");
 				ExitHandler exithandler = ServiceLoaderFactory.getServiceLoader().getService(ExitHandler.class);
 				if (exithandler !=  null) {
 					exithandler.exit();

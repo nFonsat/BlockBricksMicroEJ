@@ -4,9 +4,16 @@ import ej.microui.MicroUI;
 import ej.navigation.desktop.NavigationDesktop;
 import ej.navigation.page.Page;
 import ej.wadapps.app.Activity;
+
 import fr.fonsatnicolas.esgi.page.Home;
+import fr.fonsatnicolas.esgi.component.Score;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockBricksActivity implements Activity {
+	
+	private static List<Score> scores;
 	
 	private static NavigationDesktop navigator;
 
@@ -30,6 +37,7 @@ public class BlockBricksActivity implements Activity {
 	@Override
 	public void onStart() {
 		MicroUI.start();
+		scores = new ArrayList<>();
 		navigator = new NavigationDesktop();
 		show(new Home());
 	}
@@ -72,6 +80,18 @@ public class BlockBricksActivity implements Activity {
 	public static void reload() {
 		System.out.println("reload");
 		navigator.reload();
+	}
+	
+	public static boolean addScore(Score score) {
+		return scores.add(score);
+	}
+	
+	public static void clearScore() {
+		scores.clear();
+	}
+	
+	public static List<Score> scores() {
+		return scores;
 	}
 
 }
