@@ -1,23 +1,17 @@
 package fr.fonsatnicolas.esgi.page;
 
+import java.util.Calendar;
 import ej.container.Dock;
-import ej.microui.display.Colors;
-import ej.microui.display.GraphicsContext;
+import ej.container.List;
+import ej.container.Scroll;
 import ej.mwt.Widget;
 import ej.navigation.page.Page;
-import ej.style.Stylesheet;
-import ej.style.font.FontProfile;
-import ej.style.font.FontProfile.FontSize;
-import ej.style.outline.SimpleOutline;
-import ej.style.selector.ClassSelector;
-import ej.style.selector.TypeSelector;
-import ej.style.util.EditableStyle;
-import ej.style.util.StyleHelper;
 import ej.widget.basic.Label;
 import ej.widget.composed.Button;
 import ej.widget.listener.OnClickListener;
 import fr.fonsatnicolas.esgi.BlockBricksActivity;
-import fr.fonsatnicolas.esgi.common.BBColors;
+import fr.fonsatnicolas.esgi.component.Score;
+import fr.fonsatnicolas.esgi.stylesheet.StatsStyleSheet;
 
 public class Stats extends Page {
 	
@@ -25,17 +19,22 @@ public class Stats extends Page {
 	
 	
 	public Stats() {
-		InitializeStyle();
+		StatsStyleSheet.Initialize();
 		
 		this.container = new Dock(false);
 		this.setWidget(this.container);
 		this.container.setFirst(this.initTopBar());
+		
+		Scroll body = new Scroll(false, true);
+		body.setWidget(this.initListScore());
+		this.container.setCenter(body);
 	}
 	
 	private Widget initTopBar() {
 		Dock topBar = new Dock();
 		
-		Button back = new Button("BACK");
+		Button back = new Button("");
+		back.addClassSelector("back-button");
 		back.addOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick() {
@@ -51,27 +50,66 @@ public class Stats extends Page {
 		return topBar;
 	}
 	
-	private static void InitializeStyle() {
-		InitializeStyleTitle();
+	private List initListScore() {
+		List content = new List(false);
+		
+		
+		for (Score score : BlockBricksActivity.scores()) {
+			content.add(this.addScoreItem(score));
+		}
+		
+		return content;
 	}
 	
-	private static void InitializeStyleTitle() {
-		Stylesheet css = StyleHelper.getStylesheet();
+	private Dock addScoreItem(Score score) {
+		Dock dock = new Dock(true);
 		
-		EditableStyle style =  new EditableStyle();
+		String dateString = this.formatDateTime(score.getStart());
+		Label dateLabel = new Label(dateString);
+		dateLabel.addClassSelector("score-item");
+		dateLabel.addClassSelector("score-item-date");
+		dock.setFirst(dateLabel);
 		
-		FontProfile font = new FontProfile();
-		font.setSize(FontSize.LARGE);
-		style.setFontProfile(font);
+		Label scoreLabel = new Label(String.valueOf(score.getValue()));
+		scoreLabel.addClassSelector("score-item");
+		scoreLabel.addClassSelector("score-item-value");
+		dock.setCenter(scoreLabel);
 		
-		SimpleOutline spacing = new SimpleOutline(10);
-		style.setPadding(spacing);
-
-		style.setForegroundColor(Colors.RED);
+		String time = this.formatTime(score.time());
+		Label timeLabel = new Label(time);
+		timeLabel.addClassSelector("score-item");
+		timeLabel.addClassSelector("score-item-time");
+		dock.setLast(timeLabel);
 		
-		style.setAlignment(GraphicsContext.HCENTER | GraphicsContext.VCENTER);
-		
-		css.addRule(new ClassSelector("stats-title-label"), style);
+		return dock;
 	}
-
+	
+	private String formatTime(long time) {
+		StringBuilder builder = new StringBuilder();
+		
+		int second = (int)time/1000;
+		
+		builder.append(second).append("s");
+		return builder.toString();
+	}
+	
+	private String formatDateTime(Calendar date) {
+		StringBuilder builder = new StringBuilder();
+		
+		int day = date.get(Calendar.DAY_OF_MONTH);
+		int month = date.get(Calendar.MONTH) + 1;
+		int year = date.get(Calendar.YEAR);
+		
+		int hours = date.get(Calendar.HOUR_OF_DAY);
+		int minutes = date.get(Calendar.MINUTE);
+		
+		builder.append(day).append('/')
+			.append(month).append('/')
+			.append(year).append(' ')
+			.append(hours).append(':')
+			.append(minutes)
+			;
+		
+		return builder.toString();
+	}
 }
