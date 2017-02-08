@@ -2,22 +2,29 @@
 	Markdown
 -->
 
-# Overview
+# BlockBricksMicroEJ
 MicroEJ Application: BlockBricksMicroEJ.
 
-## Usage
-Add the following line to your `module.ivy` or your `ivy.xml`:
-> `<dependency org="fr.fonsatnicolas.esgi" name="BlockBricksMicroEJ" rev="..."/>`
+# Screenshot
 
-# Requirements
-  - EDC-1.2 or higher
-  - Wadapps Framework 1.2.0 or higher
+## Home
 
-## Dependencies
-_All dependencies are retrieved transitively by Ivy resolver_.
+![alt text](https://github.com/nFonsat/BlockBricksMicroEJ/blob/master/Screenshot/blockbricks_homepage.png "Home")
 
-# Source
-N/A
+## Game
 
-## Restrictions
-None.
+![alt text](https://github.com/nFonsat/BlockBricksMicroEJ/blob/master/Screenshot/blockbricks_game.png "Game")
+
+## Score
+
+![alt text](https://github.com/nFonsat/BlockBricksMicroEJ/blob/master/Screenshot/blockbricks_score.png "Score")
+
+
+# Property
+@nfonsat <fonsat.nicolas@gmail.com>
+
+# Documentation
+
+[MicroEJ](http://www.microej.com/)
+
+[MicroEJ Documentation](http://developer.microej.com/index.php)
